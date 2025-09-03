@@ -1,0 +1,20 @@
+{
+  "name": "bot-dev-lead-bot",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@maxdev1/sotajs": "^0.0.4"
+  },
+  "scripts": {
+    "start:bot": "cd app/bot && bun run start",
+    "dev:bot": "cd app/bot && bun run dev",
+    "test:bot": "cd app/bot && bun test"
+  }
+}

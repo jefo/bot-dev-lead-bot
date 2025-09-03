@@ -1,0 +1,22 @@
+{
+  "name": "bot-dev-lead-bot",
+  "version": "1.0.0",
+  "description": "A Telegram bot for lead generation built with SotaJS principles",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun --hot run src/index.ts",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@maxdev1/sotajs": "file:../../packages/sotajs",
+    "hono": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
