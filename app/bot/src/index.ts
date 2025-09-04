@@ -1,12 +1,27 @@
 import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
 import { setPortAdapter } from '@maxdev1/sotajs/lib/di.v2';
-import { loggerPort } from './domain/ports/bot.ports';
-import { telegramDrivingAdapter } from './infrastructure/telegram/telegram.driving-adapter';
+import { 
+  loggerPort,
+  showSegmentationPort,
+  showQualificationQuestionPort,
+  showDemonstrationGalleryPort,
+  showDemonstrationDetailPort,
+  captureLeadPort,
+  showWarmupSubscriptionPort,
+  transferLeadPort
+} from './domain/ports/bot.ports';
+import { telegramDrivingAdapter } from './infrastructure/telegram/extended.telegram-adapter';
 import { consoleLoggerAdapter } from './infrastructure/telegram/adapters/telegram.adapters';
+import { 
+  telegramLeadTransferAdapter,
+  warmupSubscriptionAdapter,
+  demonstrationContentAdapter
+} from './infrastructure/telegram/adapters/extended.adapters';
 
 // Связываем порты с адаптерами
 setPortAdapter(loggerPort, consoleLoggerAdapter);
+// TODO: Добавить остальные порты и адаптеры
 
 const app = new Hono();
 

@@ -15,6 +15,7 @@
   "scripts": {
     "start:bot": "cd app/bot && bun run start",
     "dev:bot": "cd app/bot && bun run dev",
-    "test:bot": "cd app/bot && bun test"
+    "test:bot": "cd app/bot && bun test",
+    "build:bot": "cd app/bot && bun run build"
   }
 }

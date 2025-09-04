@@ -7,14 +7,20 @@
   "scripts": {
     "start": "bun run src/index.ts",
     "dev": "bun --hot run src/index.ts",
-    "test": "bun test"
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "build": "tsc",
+    "lint": "eslint src/**/*.ts"
   },
   "dependencies": {
     "@maxdev1/sotajs": "file:../../packages/sotajs",
     "hono": "^4.0.0"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
