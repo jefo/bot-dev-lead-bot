@@ -1,4 +1,4 @@
-import { setPortAdapter, resetDI } from '@maxdev1/sotajs/lib/di.v2';
+import { setPortAdapter, resetDI, setPortAdapterWithDependencies, usePort } from '@maxdev1/sotajs/lib/di.v2';
 import {
   businessOwnerPathSelectedOutPort,
   explorerPathSelectedOutPort,
@@ -7,12 +7,13 @@ import {
   specialistPathSelectedOutPort,
   userWelcomedOutPort
 } from '../application/ports/onboarding.ports';
+import { painPointQuestionOutPort } from '../application/ports/business-owner.ports';
 import { pathSelectedAdapter, welcomeUserAdapter } from '../infrastructure/telegram/onboarding.presenters';
 import { QualificationProfile } from '../domain/entities/qualification-profile.entity';
+import { askNicheQuestionPresenter, askPainPointQuestionPresenter } from '../infrastructure/telegram/business-owner.presenters';
 
 // --- Mock-реализации для портов репозитория (для тестирования) ---
 
-// Используем in-memory хранилище для простоты
 const memoryDB = new Map<number, InstanceType<typeof QualificationProfile>>();
 
 const mockFindProfileAdapter = async (telegramId: number) => {
@@ -26,21 +27,28 @@ const mockSaveProfileAdapter = async (profile: InstanceType<typeof Qualification
 
 /**
  * Функция композиции зависимостей для модуля онбординга.
- * Связывает абстрактные порты с их конкретными реализациями (адаптерами).
  */
 export function composeOnboarding() {
-  // Очищаем контейнер перед каждой композицией (важно для тестов)
   resetDI();
 
-  // Связываем порты репозитория с mock-адаптерами
+  // Связываем порты репозитория
   setPortAdapter(findQualificationProfileByTelegramIdPort, mockFindProfileAdapter);
   setPortAdapter(saveQualificationProfilePort, mockSaveProfileAdapter);
 
-  // Связываем семантические порты вывода с адаптерами-презентерами
+  // Связываем порты онбординга
   setPortAdapter(userWelcomedOutPort, welcomeUserAdapter);
-  setPortAdapter(businessOwnerPathSelectedOutPort, pathSelectedAdapter);
+  setPortAdapter(businessOwnerPathSelectedOutPort, askNicheQuestionPresenter);
   setPortAdapter(specialistPathSelectedOutPort, pathSelectedAdapter);
   setPortAdapter(explorerPathSelectedOutPort, pathSelectedAdapter);
 
-  console.log('[Composition]: Onboarding module composed successfully.');
+  // Связываем порты бизнес-пути
+  setPortAdapter(painPointQuestionOutPort, askPainPointQuestionPresenter);
+
+  console.log('[Composition]: Onboarding & Business Path modules composed successfully.');
+}ByTelegramIdPort);
+    return (output: { telegramId: number; }) => askPainPointQuestionPresenter(output, { findProfile });
+  };
+  setPortAdapterWithDependencies(painPointQuestionOutPort, askPainPointQuestionPresenterFactory);
+
+  console.log('[Composition]: Onboarding & Business Path modules composed successfully.');
 }

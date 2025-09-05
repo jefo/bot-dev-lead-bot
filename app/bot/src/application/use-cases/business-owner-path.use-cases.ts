@@ -1,20 +1,19 @@
-import { painPointQuestionOutPort } from '../ports/business-owner.ports';
+import { painPointQuestionOutPort, relevantCaseOutPort } from '../ports/business-owner.ports';
 import { createSingleChoiceStepHandler } from './generic-step.handler';
 
-/**
- * Конфигурация для шага выбора ниши.
- */
+// --- Конфигурация для шага выбора НИШИ ---
 const selectNicheConfig = {
-  // Функция, которая знает, как обновить сущность. Она вызывает бизнес-метод,
-  // который сам выполнит валидацию.
   updateAction: (profile, niche) => profile.actions.setNiche(niche),
-  
-  // Порт, который будет вызван после успешного выполнения шага
-  nextStepOutPort: painPointQuestionOutPort,
+  nextStepOutPort: painPointQuestionOutPort, // После выбора ниши, спрашиваем про боль
 };
 
-/**
- * Use Case для выбора ниши. 
- * Является экземпляром generic-обработчика с конкретной конфигурацией.
- */
 export const selectNicheUseCase = createSingleChoiceStepHandler(selectNicheConfig);
+
+
+// --- Конфигурация для шага выбора "БОЛИ" ---
+const selectPainPointConfig = {
+  updateAction: (profile, painPoint) => profile.actions.setPainPoint(painPoint),
+  nextStepOutPort: relevantCaseOutPort, // После выбора боли, показываем кейс
+};
+
+export const selectPainPointUseCase = createSingleChoiceStepHandler(selectPainPointConfig);

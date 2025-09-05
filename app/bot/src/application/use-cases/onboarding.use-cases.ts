@@ -30,6 +30,8 @@ export async function startOnboardingUseCase(command: unknown): Promise<void> {
       id: randomUUID(),
       telegramId: validInput.telegramId,
       role: null,
+      niche: null,
+      painPoint: null,
     });
     await saveProfile(profile);
   }
