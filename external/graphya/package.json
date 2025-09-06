@@ -1,0 +1,42 @@
+{
+  "name": "@maxdev1/graphya",
+  "version": "1.0.0",
+  "description": "A TypeScript library for creating and managing graph data structures with Domain-Driven Design (DDD) principles",
+  "module": "index.ts",
+  "type": "module",
+  "private": false,
+  "keywords": [
+    "graph",
+    "ddd",
+    "domain-driven-design",
+    "typescript",
+    "nodes",
+    "edges",
+    "relations"
+  ],
+  "author": "Graphya Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/graphya.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/graphya/issues"
+  },
+  "homepage": "https://github.com/your-username/graphya#readme",
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "test": "bun test",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@maxdev1/sotajs": "^0.0.4"
+  }
+}
