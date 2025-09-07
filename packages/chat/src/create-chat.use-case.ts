@@ -5,9 +5,9 @@ import { ChatEntity } from './chat.entity';
 
 // Zod schema for input validation
 const CreateChatInputSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string().min(1),
   title: z.string().min(1),
-  participantIds: z.array(z.string().uuid()),
+  participantIds: z.array(z.string().min(1)),
 });
 
 type CreateChatInput = z.infer<typeof CreateChatInputSchema>;

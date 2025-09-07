@@ -3,9 +3,9 @@ import { z } from "zod";
 
 // Chat Entity
 const ChatSchema = z.object({
-	id: z.string().uuid(),
+	id: z.string().min(1),
 	title: z.string().min(1),
-	participantIds: z.array(z.string().uuid()),
+	participantIds: z.array(z.string().min(1)),
 	createdAt: z.date(),
 });
 

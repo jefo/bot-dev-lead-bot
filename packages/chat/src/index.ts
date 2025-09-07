@@ -22,3 +22,4 @@ export {
 export { sendMessageUseCase } from "./send-message.use-case";
 export { createPersonaUseCase } from "./create-persona.use-case";
 export { createChatUseCase } from "./create-chat.use-case";
+export { receiveIncomingMessageUseCase } from "./receive-incoming-message.use-case";

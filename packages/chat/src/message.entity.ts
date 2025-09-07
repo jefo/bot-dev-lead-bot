@@ -3,9 +3,9 @@ import { z } from "zod";
 
 // Message Entity
 const MessageSchema = z.object({
-	id: z.string().uuid(),
-	chatId: z.string().uuid(),
-	senderId: z.string().uuid(),
+	id: z.string().uuid(), // ID самого сообщения может остаться UUID
+	chatId: z.string().min(1),
+	senderId: z.string().min(1),
 	content: z.string().min(1),
 	timestamp: z.date(),
 });

@@ -5,7 +5,7 @@ import { PersonaEntity } from './persona.entity';
 
 // Zod schema for input validation
 const CreatePersonaInputSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string().min(1),
   name: z.string().min(1),
 });
 

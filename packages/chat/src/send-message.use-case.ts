@@ -10,8 +10,8 @@ import { Message } from "./message.entity";
 
 // Zod schema for input validation
 const SendMessageInputSchema = z.object({
-	chatId: z.string().uuid(),
-	senderId: z.string().uuid(),
+	chatId: z.string().min(1),
+	senderId: z.string().min(1),
 	content: z.string().min(1),
 });
 
