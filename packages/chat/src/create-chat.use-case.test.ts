@@ -1,6 +1,6 @@
-import { test, expect } from "bun:test";
+import { describe, test, expect } from "bun:test";
 import { createChatUseCase } from './create-chat.use-case';
-import { Chat } from './chat.entity';
+import { ChatEntity } from './chat.entity';
 
 describe('createChatUseCase', () => {
   test('should validate input correctly', async () => {
@@ -10,11 +10,11 @@ describe('createChatUseCase', () => {
       participantIds: [],
     };
     
-    await expect(createChatUseCase(invalidInput)).rejects.toThrow();
+    expect(createChatUseCase(invalidInput)).rejects.toThrow();
   });
   
   test('should create chat entity correctly', () => {
-    const chat = Chat.create({
+    const chat = ChatEntity.create({
       id: '123e4567-e89b-12d3-a456-426614174000',
       title: 'Test Chat',
       participantIds: ['123e4567-e89b-12d3-a456-426614174001'],

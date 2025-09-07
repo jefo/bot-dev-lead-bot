@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { usePort } from '@maxdev1/sotajs/lib/di.v2';
 import { savePersonaPort } from './chat.domain.ports';
-import { Persona } from './persona.entity';
+import { PersonaEntity } from './persona.entity';
 
 // Zod schema for input validation
 const CreatePersonaInputSchema = z.object({
@@ -19,7 +19,7 @@ export const createPersonaUseCase = async (input: unknown) => {
   const savePersona = usePort(savePersonaPort);
   
   // 3. Create domain entity
-  const persona = Persona.create({
+  const persona = PersonaEntity.create({
     id: validInput.id,
     name: validInput.name,
   });

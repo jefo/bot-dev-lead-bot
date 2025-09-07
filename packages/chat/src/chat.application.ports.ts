@@ -1,4 +1,4 @@
-import { createPort } from '@maxdev1/sotajs';
+import { createPort } from '@maxdev1/sotajs/lib/di.v2';
 import { z } from 'zod';
 
 // DTOs for application ports

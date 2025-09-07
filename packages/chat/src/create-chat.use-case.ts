@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { usePort } from '@maxdev1/sotajs/lib/di.v2';
 import { saveChatPort, findPersonaByIdPort } from './chat.domain.ports';
-import { Chat } from './chat.entity';
+import { ChatEntity } from './chat.entity';
 
 // Zod schema for input validation
 const CreateChatInputSchema = z.object({
@@ -29,7 +29,7 @@ export const createChatUseCase = async (input: unknown) => {
   }
   
   // 4. Create domain entity
-  const chat = Chat.create({
+  const chat = ChatEntity.create({
     id: validInput.id,
     title: validInput.title,
     participantIds: validInput.participantIds,
