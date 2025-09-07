@@ -10,7 +10,7 @@ export type StartConversationCommand = z.infer<typeof StartConversationCommandSc
 
 const UserInputSchema = z.object({
     type: z.enum(['text', 'callback']),
-    value: z.any(),
+    value: z.union([z.string(), z.object({}).passthrough()]).optional(),
 });
 
 export const ProcessUserInputCommmandSchema = z.object({

@@ -13,7 +13,7 @@ const ConversationSessionSchema = z.object({
 
 	status: SessionStatusSchema,
 	currentStateId: z.string(),
-	collectedData: z.record(z.any()), // Объект для сбора данных от пользователя
+	collectedData: z.record(z.string(), z.union([z.string(), z.number(), z.boolean(), z.object({}).passthrough()])).default({}), // Объект для сбора данных от пользователя
 
 	createdAt: z.date(),
 	updatedAt: z.date(),

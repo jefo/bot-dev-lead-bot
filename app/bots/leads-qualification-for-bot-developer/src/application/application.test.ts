@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, jest } from 'bun:test';
 import { resetDI, setPortAdapter } from '@maxdev1/sotajs/lib/di.v2';
+import { QualificationProfile } from '../../domain/entities/qualification-profile.entity';
 import {
   businessOwnerPathSelectedOutPort,
   explorerPathSelectedOutPort,
@@ -11,7 +12,6 @@ import {
 import { painPointQuestionOutPort, relevantCaseOutPort } from './ports/business-owner.ports';
 import { startOnboardingUseCase, selectRoleUseCase } from './use-cases/onboarding.use-cases';
 import { selectNicheUseCase, selectPainPointUseCase } from './use-cases/business-owner-path.use-cases';
-import type { QualificationProfile } from '../domain/entities/qualification-profile.entity';
 
 // --- Mocks & Spies for Application Layer Test ---
 

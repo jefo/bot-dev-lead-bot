@@ -47,8 +47,8 @@ describe('receiveIncomingMessageUseCase Integration Test', () => {
   it('should create a new Persona and Chat for a first-time message', async () => {
     // Arrange: База данных пуста
     const input = {
-      chatId: '123e4567-e89b-12d3-a456-426614174000',
-      personaId: '123e4567-e89b-12d3-a456-426614174001',
+      chatId: 'telegram:chat-123',
+      personaId: 'telegram:persona-456',
       personaName: 'John Doe',
       text: 'Hello, world!',
     };
@@ -62,10 +62,10 @@ describe('receiveIncomingMessageUseCase Integration Test', () => {
     expect(mockSaveChatPort).toHaveBeenCalledTimes(1);
 
     // 2. В "базе данных" появились нужные записи
-    expect(memoryPersonas.has('123e4567-e89b-12d3-a456-426614174001')).toBe(true);
-    expect(memoryChats.has('123e4567-e89b-12d3-a456-426614174000')).toBe(true);
-    const chatInDb = memoryChats.get('123e4567-e89b-12d3-a456-426614174000');
-    expect(chatInDb?.state.participantIds).toContain('123e4567-e89b-12d3-a456-426614174001');
+    expect(memoryPersonas.has('telegram:persona-456')).toBe(true);
+    expect(memoryChats.has('telegram:chat-123')).toBe(true);
+    const chatInDb = memoryChats.get('telegram:chat-123');
+    expect(chatInDb?.state.participantIds).toContain('telegram:persona-456');
 
     // 3. Сообщение было сохранено и отправлено в порт вывода
     expect(mockSaveMessagePort).toHaveBeenCalledTimes(1);
@@ -78,8 +78,8 @@ describe('receiveIncomingMessageUseCase Integration Test', () => {
 
   it('should use existing Persona and Chat for a subsequent message', async () => {
     // Arrange: Предварительно создаем Персону и Чат
-    const personaId = '223e4567-e89b-12d3-a456-426614174002';
-    const chatId = '223e4567-e89b-12d3-a456-426614174003';
+    const personaId = 'telegram:persona-789';
+    const chatId = 'telegram:chat-101';
     await createPersonaUseCase({ id: personaId, name: 'Jane Doe' });
     await createChatUseCase({ id: chatId, title: 'Existing Chat', participantIds: [personaId] });
 

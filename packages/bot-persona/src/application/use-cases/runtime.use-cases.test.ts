@@ -26,16 +26,16 @@ import {
 
 const memoryBots = new Map<string, BotAggregateType>();
 const memoryConversations = new Map<string, ConversationAggregateType>();
-const memorySessions = new Map<string, ConversationAggregateType>();
+const memorySessions = new Map<string, any>();
 
 const mockSaveSessionPort = jest.fn(async (s) => {
-	memorySessions.set(s.id, s);
+	memorySessions.set(s.state.id, s);
 });
 const mockRenderComponentOutPort = jest.fn();
 
 // --- Тестовые данные ---
 
-const mockConversationDefinition = ConversationAggregate.create({
+const mockConversationDefinition = {
 	id: randomUUID(),
 	fsm: {
 		initialState: "start",
@@ -54,7 +54,7 @@ const mockConversationDefinition = ConversationAggregate.create({
 			end: { component: "ThankYouMessage" },
 		},
 	},
-});
+};
 
 describe("BotPersona SDK Runtime Use Cases", () => {
 	let mockBot: BotAggregateType;
@@ -73,10 +73,10 @@ describe("BotPersona SDK Runtime Use Cases", () => {
 		mockBot = BotAggregate.create({
 			id: randomUUID(),
 			name: "Test Bot",
-			conversationId: mockConversation.id,
+			conversationId: mockConversation.state.id,
 		});
-		memoryBots.set(mockBot.id, mockBot);
-		memoryConversations.set(mockConversation.id, mockConversation);
+		memoryBots.set(mockBot.state.id, mockBot);
+		memoryConversations.set(mockConversation.state.id, mockConversation);
 
 		// --- Composition Root (локальный для теста) ---
 		setPortAdapter(findBotByIdPort, async (id) => memoryBots.get(id) || null);
@@ -103,7 +103,7 @@ describe("BotPersona SDK Runtime Use Cases", () => {
 		it("should create a new session and render the initial component", async () => {
 			// Arrange
 			const command = {
-				botId: mockBot.id,
+				botId: mockBot.state.id,
 				personaId: "user:1",
 				chatId: "chat:1",
 			};
@@ -115,7 +115,7 @@ describe("BotPersona SDK Runtime Use Cases", () => {
 			expect(mockSaveSessionPort).toHaveBeenCalledTimes(1);
 			const session = Array.from(memorySessions.values())[0];
 			expect(session.state.currentStateId).toBe("start");
-			expect(session.state.botId).toBe(mockBot.id);
+			expect(session.state.botId).toBe(mockBot.state.id);
 
 			expect(mockRenderComponentOutPort).toHaveBeenCalledTimes(1);
 			expect(mockRenderComponentOutPort).toHaveBeenCalledWith({
@@ -130,7 +130,7 @@ describe("BotPersona SDK Runtime Use Cases", () => {
 		it("should transition to the next state on valid input", async () => {
 			// Arrange: Сначала создаем активную сессию
 			const startCommand = {
-				botId: mockBot.id,
+				botId: mockBot.state.id,
 				personaId: "user:1",
 				chatId: "chat:1",
 			};
@@ -139,7 +139,7 @@ describe("BotPersona SDK Runtime Use Cases", () => {
 
 			const processCommand = {
 				personaId: "user:1",
-				userInput: { type: "callback", value: "GREETING" }, // Это событие должно перевести нас из 'start' в 'question_1'
+				userInput: { type: "callback", value: { data: "GREETING" } }, // Это событие должно перевести нас из 'start' в 'question_1'
 			};
 
 			// Act
@@ -160,7 +160,7 @@ describe("BotPersona SDK Runtime Use Cases", () => {
 		it("should not transition on invalid input", async () => {
 			// Arrange: Создаем активную сессию в состоянии 'start'
 			const startCommand = {
-				botId: mockBot.id,
+				botId: mockBot.state.id,
 				personaId: "user:1",
 				chatId: "chat:1",
 			};
@@ -170,7 +170,7 @@ describe("BotPersona SDK Runtime Use Cases", () => {
 
 			const processCommand = {
 				personaId: "user:1",
-				userInput: { type: "callback", value: "INVALID_EVENT" }, // Несуществующее событие
+				userInput: { type: "callback", value: { data: "INVALID_EVENT" } }, // Несуществующее событие
 			};
 
 			// Act

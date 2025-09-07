@@ -37,12 +37,12 @@ export async function defineBotUseCase(
 	const bot = BotAggregate.create({
 		id: randomUUID(),
 		name: botName,
-		conversationId: conversation.id,
+		conversationId: conversation.state.id,
 	});
 
 	// 6. Сохранение BotAggregate
 	await saveBot(bot);
 
 	// 7. Возвращаем ID созданного бота
-	return { botId: bot.id };
+	return { botId: bot.state.id };
 }

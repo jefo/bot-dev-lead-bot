@@ -41,7 +41,7 @@ export async function startConversationUseCase(
 	const session = ConversationSession.create({
 		id: randomUUID(),
 		botId,
-		conversationId: conversation.id,
+		conversationId: conversation.state.id,
 		personaId,
 		chatId,
 		status: "active",
@@ -54,11 +54,13 @@ export async function startConversationUseCase(
 	await saveSession(session);
 
 	const initialNode = conversation.state.graph.nodes[initialState];
-	await renderComponent({
-		chatId,
-		component: initialNode.component,
-		props: initialNode.props,
-	});
+	if (initialNode) {
+		await renderComponent({
+			chatId,
+			component: initialNode.component,
+			props: initialNode.props,
+		});
+	}
 }
 
 /**
@@ -89,8 +91,13 @@ export async function processUserInputUseCase(command: unknown): Promise<void> {
 		throw new Error(`State ${session.state.currentStateId} not found in FSM.`);
 
 	// TODO: Реализовать более сложный маппинг userInput на event FSM
-	const event = userInput.value.toString();
-	const nextStateId = currentState.on[event];
+	let event = "";
+	if (typeof userInput.value === "string") {
+		event = userInput.value;
+	} else if (userInput.value && typeof userInput.value === "object" && "data" in userInput.value) {
+		event = userInput.value.data as string;
+	}
+	const nextStateId = currentState.on?.[event];
 
 	if (!nextStateId) {
 		console.log(
@@ -100,14 +107,20 @@ export async function processUserInputUseCase(command: unknown): Promise<void> {
 		return;
 	}
 
-	session.actions.transitionTo(nextStateId);
+	const updatedState = session.actions.transitionTo(nextStateId);
+	const updatedSession = ConversationSession.create({
+		...session.state,
+		...updatedState
+	});
 	// TODO: Добавить логику сохранения данных из userInput в session.collectedData
-	await saveSession(session);
+	await saveSession(updatedSession);
 
 	const nextNode = conversation.state.graph.nodes[nextStateId];
-	await renderComponent({
-		chatId: session.state.chatId,
-		component: nextNode.component,
-		props: nextNode.props,
-	});
+	if (nextNode) {
+		await renderComponent({
+			chatId: session.state.chatId,
+			component: nextNode.component,
+			props: nextNode.props,
+		});
+	}
 }

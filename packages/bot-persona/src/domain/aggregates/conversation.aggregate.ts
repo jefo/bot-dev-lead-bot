@@ -4,21 +4,21 @@ import { z } from "zod";
 // --- Схемы для FSM и Графа ---
 
 const FsmStateSchema = z.object({
-	on: z.record(z.string()), // on: { EVENT_NAME: 'target_state_id' }
+	on: z.record(z.string(), z.string()), // on: { EVENT_NAME: 'target_state_id' }
 });
 
 const FsmSchema = z.object({
 	initialState: z.string(),
-	states: z.record(FsmStateSchema),
+	states: z.record(z.string(), FsmStateSchema),
 });
 
 const GraphNodeSchema = z.object({
 	component: z.string(),
-	props: z.record(z.any()).optional(),
+	props: z.record(z.string(), z.union([z.string(), z.number(), z.boolean(), z.object({}).passthrough()])).optional(),
 });
 
 const GraphSchema = z.object({
-	nodes: z.record(GraphNodeSchema),
+	nodes: z.record(z.string(), GraphNodeSchema),
 });
 
 // --- Схема самого Агрегата ---
@@ -47,7 +47,7 @@ export const ConversationAggregate = createAggregate({
 		// 2. Каждое целевое состояние в переходах FSM должно существовать в графе
 		(state) => {
 			for (const fsmState of Object.values(state.fsm.states)) {
-				for (const targetStateId of Object.values(fsmState.on)) {
+				for (const targetStateId of Object.values(fsmState.on || {})) {
 					if (!state.graph.nodes[targetStateId]) {
 						throw new Error(
 							`FSM transition target state '${targetStateId}' does not exist in the graph nodes.`,
