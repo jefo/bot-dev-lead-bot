@@ -7,6 +7,6 @@
     "@types/bun": "latest"
   },
   "dependencies": {
-    "@maxdev1/sotajs": "^0.0.4"
+    "@maxdev1/sotajs": "0.0.6"
   }
 }
