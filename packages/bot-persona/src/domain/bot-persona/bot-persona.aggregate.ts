@@ -1,4 +1,4 @@
-import { createAggregate } from "@maxdev1/sotajs/lib/aggregate";
+import { createAggregate } from "@maxdev1/sotajs";
 import { z } from "zod";
 import { FsmSchema, FSM } from "./fsm.vo";
 import { ViewMapSchema, ViewMap } from "./view-map.vo";

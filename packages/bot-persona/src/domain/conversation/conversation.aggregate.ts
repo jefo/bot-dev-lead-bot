@@ -46,7 +46,7 @@ export const Conversation = createAggregate({
 		processInput(
 			state: ConversationState,
 			fsm: FSM,
-			event: string,
+		event: string,
 			payload: unknown,
 		) {
 			if (state.status !== "active") {

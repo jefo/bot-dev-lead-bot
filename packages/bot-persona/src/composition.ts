@@ -1,12 +1,15 @@
-import { setPortAdapter, resetDI } from "@maxdev1/sotajs/lib/di.v2";
+import { setPortAdapter, resetDI } from "@maxdev1/sotajs";
 
 // Импорт всех портов
-import * as AppPorts from "../application/ports";
-import * as DomainPorts from "../domain/ports";
+import * as AppPorts from "./application/ports";
+import * as DomainPorts from "./domain/ports";
 
 // Импорт всех адаптеров
-import * as Persistence from "./persistence/in-memory.adapters";
-import * as Presenters from "./presenters/console.presenters";
+import * as Persistence from "./infrastructure/persistence/in-memory.adapters";
+import * as Presenters from "./infrastructure/presenters/console.presenters";
+
+// Экспортируем адаптер для тестов
+export { inMemoryFindAllBotPersonasAdapter } from "./infrastructure/persistence/in-memory.adapters";
 
 /**
  * Функция для связывания всех портов с их реализациями (адаптерами).

@@ -1,8 +1,8 @@
-import { usePort } from "@maxdev1/sotajs/lib/di.v2";
+import { usePort } from "@maxdev1/sotajs";
 import { FSM } from "../../domain/bot-persona/fsm.vo";
 import { ViewMap } from "../../domain/bot-persona/view-map.vo";
 import {
-	ProcessUserInputCommmand,
+	type ProcessUserInputCommmand,
 	ProcessUserInputCommmandSchema,
 } from "../dtos";
 import {

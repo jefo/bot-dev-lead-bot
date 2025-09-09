@@ -2,8 +2,8 @@ import type { BotPersonaType } from "../../domain/bot-persona/bot-persona.aggreg
 import type { ConversationType } from "../../domain/conversation/conversation.aggregate";
 
 // Эмуляция таблиц в базе данных
-const botPersonas = new Map<string, BotPersonaType>();
-const conversations = new Map<string, ConversationType>();
+export const botPersonas = new Map<string, BotPersonaType>();
+export const conversations = new Map<string, ConversationType>();
 
 // --- Адаптеры для BotPersona ---
 
@@ -13,6 +13,11 @@ export const inMemorySaveBotPersonaAdapter = async (persona: BotPersonaType): Pr
 
 export const inMemoryFindBotPersonaByIdAdapter = async (id: string): Promise<BotPersonaType | null> => {
   return botPersonas.get(id) ?? null;
+};
+
+// Адаптер для тестов - возвращает все botPersonas
+export const inMemoryFindAllBotPersonasAdapter = async (): Promise<Map<string, BotPersonaType>> => {
+  return botPersonas;
 };
 
 // --- Адаптеры для Conversation ---
