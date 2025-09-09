@@ -5,15 +5,15 @@ export const ComponentPropSchema = z.union([
 	z.string(),
 	z.number(),
 	z.boolean(),
-	z
-		.object({})
-		.passthrough(), // Для сложных объектов
+	z.array(z.string()), // Добавляем поддержку массивов строк
+	z.array(z.number()), // Добавляем поддержку массивов чисел
+	z.array(z.boolean()), // Добавляем поддержку массивов булевых значений
 ]);
 
 export const ComponentDescriptorSchema = z.object({
 	id: z.string(), // ID состояния, с которым связан этот компонент
 	component: z.string(),
-	props: z.record(ComponentPropSchema).optional(),
+	props: z.record(z.string(), ComponentPropSchema).optional(), // Исправлено: добавлен ключевой тип
 });
 
 export const ViewMapSchema = z.object({

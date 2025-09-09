@@ -61,4 +61,8 @@ export class FSM {
 		if (!state) return null;
 		return state.on?.find((t) => t.event === event) ?? null;
 	}
+
+	public getState(stateId: string): StateDefinition | undefined {
+		return this.statesById.get(stateId);
+	}
 }

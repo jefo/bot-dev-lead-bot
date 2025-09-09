@@ -51,10 +51,6 @@ async function run() {
   // Для простоты теста, мы можем модифицировать in-memory адаптер, чтобы он возвращал ID,
   // но пока оставим так.
   // Давайте найдем его!
-  const personaId = "... some id ..."; // Это не сработает
-  // Вместо этого, давайте модифицируем адаптер, чтобы он был предсказуемым
-
-  // --- HACK для теста: получим ID из "базы данных" ---
   const { inMemoryFindBotPersonaByIdAdapter } = await import("./src/infrastructure/persistence/in-memory.adapters");
   const persona = await inMemoryFindBotPersonaByIdAdapter(
       // @ts-ignore - небольшой хак, чтобы найти ID
