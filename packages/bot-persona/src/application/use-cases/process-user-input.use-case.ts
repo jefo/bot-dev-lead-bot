@@ -9,6 +9,8 @@ import {
 	findActiveConversationByChatIdPort,
 	findBotPersonaByIdPort,
 	saveConversationPort,
+} from "../../domain/ports";
+import {
 	componentRenderOutPort,
 	invalidInputOutPort,
 	conversationFinishedOutPort,

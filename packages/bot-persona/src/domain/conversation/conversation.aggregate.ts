@@ -1,4 +1,4 @@
-import { createAggregate } from "@maxdev1/sotajs/lib/aggregate";
+import { createAggregate } from "@maxdev1/sotajs";
 import { z } from "zod";
 import { HistoryEntry, HistoryEntrySchema } from "./history-entry.vo";
 import type { FSM } from "../bot-persona/fsm.vo";

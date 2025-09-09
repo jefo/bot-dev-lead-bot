@@ -4,11 +4,9 @@ import { BotPersona } from "../../domain/bot-persona/bot-persona.aggregate";
 import {
 	DefineBotPersonaCommand,
 	DefineBotPersonaCommandSchema,
-} from "../application/dtos";
-import {
-	operationFailedOutPort,
-	saveBotPersonaPort,
-} from "../application/ports";
+} from "../dtos";
+import { operationFailedOutPort } from "../ports";
+import { saveBotPersonaPort } from "../../domain/ports";
 
 /**
  * Use Case для определения нового шаблона бота (BotPersona).
