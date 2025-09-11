@@ -14,3 +14,7 @@ export const conversationNotFoundOutPort =
 	createPort<(dto: FailureDto) => Promise<void>>();
 export const operationFailedOutPort =
 	createPort<(dto: FailureDto) => Promise<void>>();
+
+// New port for conversation model definition
+export const conversationModelDefinedOutPort =
+	createPort<(dto: { modelId: string; name: string }) => Promise<void>>();

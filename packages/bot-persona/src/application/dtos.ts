@@ -1,27 +1,80 @@
-import { z } from 'zod';
+// --- Типы для FSM ---
+
+export type TransitionDto = {
+  event: string;
+  target: string;
+  assign?: Record<string, string>;
+};
+
+export type StateDto = {
+  id: string;
+  on?: TransitionDto[];
+};
+
+export type FsmDto = {
+  initialState: string;
+  states: StateDto[];
+};
+
+// --- Типы для ViewMap ---
+
+export type ComponentPropDto = 
+  | string
+  | number
+  | boolean
+  | string[]
+  | number[]
+  | boolean[];
+
+export type ComponentDescriptorDto = {
+  id: string; // ID состояния, с которым связан этот компонент
+  component: string;
+  props?: Record<string, ComponentPropDto>;
+};
+
+export type ViewMapDto = {
+  nodes: ComponentDescriptorDto[];
+};
+
+// --- Типы для FormDefinition ---
+
+export type FormFieldDefinitionDto = {
+  id: string;
+  type: string; // text, number, boolean, etc.
+  label: string;
+  required?: boolean;
+  validation?: {
+    pattern?: string;
+    minLength?: number;
+    maxLength?: number;
+    min?: number;
+    max?: number;
+  };
+};
+
+export type FormDefinitionDto = {
+  fields: FormFieldDefinitionDto[];
+};
 
 // --- DTO для команд ---
 
-export const DefineBotPersonaCommandSchema = z.object({
-  name: z.string(),
-  fsm: z.any(), // Валидация будет на уровне домена
-  viewMap: z.any(),
-});
-export type DefineBotPersonaCommand = z.infer<typeof DefineBotPersonaCommandSchema>;
+export type DefineBotPersonaCommand = {
+  name: string;
+  fsm: unknown; // Валидация будет на уровне домена
+  viewMap: unknown;
+  formDefinition?: unknown; // Определение формы (опционально)
+};
 
-export const StartConversationCommandSchema = z.object({
-  botPersonaId: z.string().uuid(),
-  chatId: z.string(),
-});
-export type StartConversationCommand = z.infer<typeof StartConversationCommandSchema>;
+export type StartConversationCommand = {
+  botPersonaId: string;
+  chatId: string;
+};
 
-export const ProcessUserInputCommmandSchema = z.object({
-  chatId: z.string(),
-  event: z.string(),
-  payload: z.unknown().optional(),
-});
-export type ProcessUserInputCommmand = z.infer<typeof ProcessUserInputCommmandSchema>;
-
+export type ProcessUserInputCommmand = {
+  chatId: string;
+  event: string;
+  payload?: unknown;
+};
 
 // --- DTO для выходных портов ---
 

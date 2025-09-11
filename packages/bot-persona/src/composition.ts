@@ -24,10 +24,16 @@ export function composeApp() {
   setPortAdapter(DomainPorts.findBotPersonaByIdPort, Persistence.inMemoryFindBotPersonaByIdAdapter);
   setPortAdapter(DomainPorts.saveConversationPort, Persistence.inMemorySaveConversationAdapter);
   setPortAdapter(DomainPorts.findActiveConversationByChatIdPort, Persistence.inMemoryFindActiveConversationByChatIdAdapter);
+  setPortAdapter(DomainPorts.saveConversationModelPort, Persistence.inMemorySaveConversationModelAdapter);
+  setPortAdapter(DomainPorts.findConversationModelByIdPort, Persistence.inMemoryFindConversationModelByIdAdapter);
 
   // --- Связывание выходных портов ---
   setPortAdapter(AppPorts.componentRenderOutPort, Presenters.consoleComponentRenderAdapter);
   setPortAdapter(AppPorts.operationFailedOutPort, Presenters.consoleFailurePresenter);
+  setPortAdapter(AppPorts.conversationModelDefinedOutPort, async (dto) => {
+    console.log(`--- Conversation Model Defined: ${dto.name} (ID: ${dto.modelId}) ---`);
+    return Promise.resolve();
+  });
   
   // Связываем остальные порты с тем же обработчиком ошибок для простоты
   setPortAdapter(AppPorts.conversationFinishedOutPort, (dto) => {

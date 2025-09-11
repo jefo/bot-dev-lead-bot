@@ -6,8 +6,7 @@ import { ViewMapSchema, ViewMap } from "./view-map.vo";
 const BotPersonaSchema = z.object({
 	id: z.string().uuid(),
 	name: z.string(),
-	fsm: FsmSchema,
-	viewMap: ViewMapSchema,
+
 });
 
 export type BotPersonaState = z.infer<typeof BotPersonaSchema>;
@@ -43,3 +42,20 @@ export const BotPersona = createAggregate({
 });
 
 export type BotPersonaType = ReturnType<typeof BotPersona.create>;
+
+export const conversationAggregateFactory = <T>() => createAggregate({
+	name: "Conversation",
+	schema: z.object({
+		id: z.string().uuid(),
+		botPersonaId: z.string().uuid(),
+		// TODO generic form data
+		formData: T,
+		fsm: FsmSchema,
+		viewMap: ViewMapSchema,
+	}),
+	invariants: [],
+	actions: {
+		// TODO: conversation/digalog business logic
+		// TODO: 
+	},
+});

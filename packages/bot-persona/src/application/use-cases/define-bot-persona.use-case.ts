@@ -1,12 +1,9 @@
 import { usePort } from "@maxdev1/sotajs";
 import { randomUUID } from "crypto";
 import { BotPersona } from "../../domain/bot-persona/bot-persona.aggregate";
-import {
-	DefineBotPersonaCommand,
-	DefineBotPersonaCommandSchema,
-} from "../dtos";
 import { operationFailedOutPort } from "../ports";
 import { saveBotPersonaPort } from "../../domain/ports";
+import type { DefineBotPersonaCommand } from "../dtos";
 
 /**
  * Use Case для определения нового шаблона бота (BotPersona).
@@ -15,8 +12,8 @@ export async function defineBotPersonaUseCase(
 	command: DefineBotPersonaCommand,
 ): Promise<void> {
 	console.log("DefineBotPersonaUseCase called with command:", command);
-	const { name, fsm, viewMap } = DefineBotPersonaCommandSchema.parse(command);
-	console.log("Parsed command:", { name, fsm, viewMap });
+	const { name, fsm, viewMap } = command;
+	console.log("Command data:", { name, fsm, viewMap });
 
 	const saveBotPersona = usePort(saveBotPersonaPort);
 	const operationFailed = usePort(operationFailedOutPort);

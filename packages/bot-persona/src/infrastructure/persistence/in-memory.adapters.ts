@@ -1,9 +1,11 @@
 import type { BotPersonaType } from "../../domain/bot-persona/bot-persona.aggregate";
 import type { ConversationType } from "../../domain/conversation/conversation.aggregate";
+import type { ConversationModel } from "../../domain/conversation/conversation-model.type";
 
 // Эмуляция таблиц в базе данных
 export const botPersonas = new Map<string, BotPersonaType>();
 export const conversations = new Map<string, ConversationType>();
+export const conversationModels = new Map<string, ConversationModel>();
 
 // --- Адаптеры для BotPersona ---
 
@@ -33,4 +35,14 @@ export const inMemoryFindActiveConversationByChatIdAdapter = async (chatId: stri
     }
   }
   return null;
+};
+
+// --- Адаптеры для Conversation Model ---
+
+export const inMemorySaveConversationModelAdapter = async (model: ConversationModel): Promise<void> => {
+  conversationModels.set(model.id, model);
+};
+
+export const inMemoryFindConversationModelByIdAdapter = async (id: string): Promise<ConversationModel | null> => {
+  return conversationModels.get(id) ?? null;
 };

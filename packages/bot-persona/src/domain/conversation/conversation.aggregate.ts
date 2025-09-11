@@ -1,20 +1,16 @@
 import { createAggregate } from "@maxdev1/sotajs";
 import { z } from "zod";
-import { HistoryEntry, HistoryEntrySchema } from "./history-entry.vo";
 import type { FSM } from "../bot-persona/fsm.vo";
+import { Form } from "../bot-persona/form.entity";
 
-const ConversationContextSchema = z.record(
-	z.union([z.string(), z.number(), z.boolean(), z.object({}).passthrough()]),
-);
-
+// TODO: ConversationSchema должна стать фабрикой схем, у которой на входе схема заполняемой формы ()
 const ConversationSchema = z.object({
 	id: z.string().uuid(),
 	botPersonaId: z.string().uuid(),
 	chatId: z.string(),
 	status: z.enum(["active", "finished", "cancelled"]),
 	currentStateId: z.string(),
-	context: ConversationContextSchema.default({}),
-	history: z.array(HistoryEntrySchema).default([]),
+	// TODO: add form schema
 	createdAt: z.date(),
 	updatedAt: z.date(),
 });
@@ -28,13 +24,7 @@ type ConversationState = z.infer<typeof ConversationSchema>;
 export const Conversation = createAggregate({
 	name: "Conversation",
 	schema: ConversationSchema,
-	invariants: [
-		(state) => {
-			if (state.status !== "active" && state.history.length === 0) {
-				throw new Error("Non-active conversation cannot be empty.");
-			}
-		},
-	],
+	invariants: [],
 	actions: {
 		/**
 		 * Обрабатывает ввод пользователя и производит переход состояния.
@@ -46,7 +36,7 @@ export const Conversation = createAggregate({
 		processInput(
 			state: ConversationState,
 			fsm: FSM,
-		event: string,
+			event: string,
 			payload: unknown,
 		) {
 			if (state.status !== "active") {
@@ -79,14 +69,6 @@ export const Conversation = createAggregate({
 					}
 				}
 			}
-
-			// Добавляем запись в историю
-			state.history.push({
-				event,
-				fromState: previousStateId,
-				toState: state.currentStateId,
-				timestamp: new Date(),
-			});
 
 			state.updatedAt = new Date();
 		},
