@@ -8,9 +8,12 @@ import type {
 export const createConversation = <const TDescriptor extends IEntityDescriptor>(
 	formDescriptor: TDescriptor,
 ) => {
+	// 1. Используем новую, типобезопасную фабрику
 	const FormEntity = createRuntimeEntity(formDescriptor);
+	// 2. Выводим тип формы автоматически
 	type FormInstance = InstanceTypeFromDescriptor<TDescriptor>;
 
+	// 3. Убираем context и history из props
 	interface ConversationProps {
 		id: string;
 		botPersonaId: string;
@@ -19,6 +22,7 @@ export const createConversation = <const TDescriptor extends IEntityDescriptor>(
 		currentStateId: string;
 		createdAt: Date;
 		updatedAt: Date;
+		// 4. Используем выведенный тип для form
 		form: FormInstance;
 	}
 
@@ -29,6 +33,7 @@ export const createConversation = <const TDescriptor extends IEntityDescriptor>(
 			this.props = props;
 		}
 
+		// 5. Упрощаем метод create
 		static create(
 			props: Omit<ConversationProps, "form" | "status"> & {
 				form?: Partial<FormInstance>;
@@ -43,38 +48,34 @@ export const createConversation = <const TDescriptor extends IEntityDescriptor>(
 			});
 		}
 
-		get form(): FormInstance {
-			return this.props.form;
-		}
-
 		get id() {
 			return this.props.id;
 		}
-
 		get botPersonaId() {
 			return this.props.botPersonaId;
 		}
-
 		get chatId() {
 			return this.props.chatId;
 		}
-
 		get status() {
 			return this.props.status;
 		}
-
 		get currentStateId() {
 			return this.props.currentStateId;
 		}
-
 		get createdAt() {
 			return this.props.createdAt;
 		}
-
 		get updatedAt() {
 			return this.props.updatedAt;
 		}
 
+		// 6. Типобезопасный геттер для формы
+		get form(): FormInstance {
+			return this.props.form;
+		}
+
+		// 7. Упрощаем processInput
 		processInput(fsm: FSM, event: string, payload: any) {
 			if (this.props.status !== "active") {
 				throw new Error("Cannot process input in a non-active conversation.");
@@ -87,6 +88,7 @@ export const createConversation = <const TDescriptor extends IEntityDescriptor>(
 
 			this.props.currentStateId = transition.target;
 
+			// Обновляем только форму
 			if (transition.assign) {
 				for (const [key, valueExpr] of Object.entries(transition.assign)) {
 					let value: any;
@@ -100,8 +102,11 @@ export const createConversation = <const TDescriptor extends IEntityDescriptor>(
 						value = valueExpr;
 					}
 
-					if (key in this.form) {
-						(this.form as any)[key] = value;
+					if (Object.prototype.hasOwnProperty.call(this.form, key)) {
+						// Вызываем новый, типобезопасный метод .set().
+						// Утверждение типа `as keyof FormInstance` все еще нужно, т.к. `key` - это строка,
+						// но теперь мы вызываем строго типизированный метод, а не мутируем `any`.
+						this.form.set(key as keyof FormInstance, value);
 					}
 				}
 			}
@@ -124,5 +129,7 @@ export const createConversation = <const TDescriptor extends IEntityDescriptor>(
 			this.props.status = "cancelled";
 			this.props.updatedAt = new Date();
 		}
+
+		// 8. Геттеры для context, history и state удалены
 	};
 };

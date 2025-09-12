@@ -20,7 +20,7 @@ export async function defineBotPersonaUseCase(
 
 	try {
 		console.log("Creating BotPersona");
-		const botPersona = BotPersona.create({
+				const botPersona = BotPersona.create({
 			id: randomUUID(),
 			name,
 			fsm,

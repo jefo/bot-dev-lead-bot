@@ -3,7 +3,6 @@ import { FSM } from "../../domain/bot-persona/fsm.vo";
 import { ViewMap } from "../../domain/bot-persona/view-map.vo";
 import {
 	type ProcessUserInputCommmand,
-	ProcessUserInputCommmandSchema,
 } from "../dtos";
 import {
 	findActiveConversationByChatIdPort,
@@ -23,8 +22,7 @@ import {
 export async function processUserInputUseCase(
 	command: ProcessUserInputCommmand,
 ): Promise<void> {
-	const { chatId, event, payload } =
-		ProcessUserInputCommmandSchema.parse(command);
+	const { chatId, event, payload } = command;
 
 	// Получение всех зависимостей через порты
 	const findConversation = usePort(findActiveConversationByChatIdPort);

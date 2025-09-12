@@ -5,7 +5,6 @@ import { FSM } from "../../domain/bot-persona/fsm.vo";
 import { ViewMap } from "../../domain/bot-persona/view-map.vo";
 import {
 	type StartConversationCommand,
-	StartConversationCommandSchema,
 } from "../dtos";
 import {
 	findBotPersonaByIdPort,
@@ -19,8 +18,7 @@ import { componentRenderOutPort, operationFailedOutPort } from "../ports";
 export async function startConversationUseCase(
 	command: StartConversationCommand,
 ): Promise<void> {
-	const { botPersonaId, chatId } =
-		StartConversationCommandSchema.parse(command);
+	const { botPersonaId, chatId } = command;
 
 	const findBotPersonaById = usePort(findBotPersonaByIdPort);
 	const saveConversation = usePort(saveConversationPort);

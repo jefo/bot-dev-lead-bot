@@ -39,7 +39,7 @@ describe("BotPersona Creation Test", () => {
     console.log("Creating BotPersona with data:", JSON.stringify(botPersonaData, null, 2));
     
     try {
-      const botPersona = BotPersona.create(botPersonaData);
+      const botPersona = BotPersona.create({ state: botPersonaData });
       console.log("BotPersona created successfully");
       expect(botPersona).toBeDefined();
       expect(botPersona.state.name).toBe("Test Bot");

@@ -3,10 +3,12 @@ import { z } from "zod";
 import { FsmSchema, FSM } from "./fsm.vo";
 import { ViewMapSchema, ViewMap } from "./view-map.vo";
 
+// Схема была исправлена: добавлены fsm и viewMap
 const BotPersonaSchema = z.object({
 	id: z.string().uuid(),
 	name: z.string(),
-
+	fsm: FsmSchema,
+	viewMap: ViewMapSchema,
 });
 
 export type BotPersonaState = z.infer<typeof BotPersonaSchema>;
@@ -21,6 +23,7 @@ export const BotPersona = createAggregate({
 	schema: BotPersonaSchema,
 	invariants: [
 		// Кросс-контекстный инвариант: каждое состояние в FSM должно иметь узел в ViewMap.
+		// Теперь этот инвариант работает корректно, так как fsm и viewMap есть в схеме.
 		(state) => {
 			const fsm = new FSM(state.fsm);
 			const viewMap = new ViewMap(state.viewMap);
@@ -43,19 +46,4 @@ export const BotPersona = createAggregate({
 
 export type BotPersonaType = ReturnType<typeof BotPersona.create>;
 
-export const conversationAggregateFactory = <T>() => createAggregate({
-	name: "Conversation",
-	schema: z.object({
-		id: z.string().uuid(),
-		botPersonaId: z.string().uuid(),
-		// TODO generic form data
-		formData: T,
-		fsm: FsmSchema,
-		viewMap: ViewMapSchema,
-	}),
-	invariants: [],
-	actions: {
-		// TODO: conversation/digalog business logic
-		// TODO: 
-	},
-});
+// Экспериментальная фабрика удалена

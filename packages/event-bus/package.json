@@ -1,0 +1,16 @@
+{
+  "name": "@personaforge/event-bus",
+  "version": "0.1.0",
+  "module": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@maxdev1/sotajs": "^0.0.6"
+  }
+}

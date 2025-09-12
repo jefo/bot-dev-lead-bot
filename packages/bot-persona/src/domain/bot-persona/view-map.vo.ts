@@ -5,9 +5,10 @@ export const ComponentPropSchema = z.union([
 	z.string(),
 	z.number(),
 	z.boolean(),
-	z.array(z.string()), // Добавляем поддержку массивов строк
-	z.array(z.number()), // Добавляем поддержку массивов чисел
-	z.array(z.boolean()), // Добавляем поддержку массивов булевых значений
+	z.array(z.string()),
+	z.array(z.number()),
+	z.array(z.boolean()),
+	z.record(z.string(), z.any()), // Разрешаем объекты в качестве props
 ]);
 
 export const ComponentDescriptorSchema = z.object({
